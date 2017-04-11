@@ -1,0 +1,6 @@
+[package]
+name = "reversi"
+version = "0.1.0"
+authors = ["lesguillemets <lesguillemets@users.noreply.github.com>"]
+
+[dependencies]
