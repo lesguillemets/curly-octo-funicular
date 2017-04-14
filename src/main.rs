@@ -57,6 +57,30 @@ impl fmt::Display for Board {
     }
 }
 
+impl Board {
+    fn count_bw(&self) -> (usize, usize) {
+        let mut black: usize = 0;
+        let mut white: usize = 0;
+        for row in self.0.iter() {
+            for cell in row {
+                match *cell {
+                    Some(Face::Black) => black += 1,
+                    Some(Face::White) => white += 1,
+                    _ => (),
+                }
+            }
+        }
+        (black, white)
+    }
+
+    fn print_count(&self) -> () {
+        let counts = self.count_bw();
+        println!("black : {}  white : {}", counts.0, counts.1);
+    }
+}
+
 fn main() {
-    println!("{}", Board::initial());
+    let board: Board = Board::initial();
+    println!("{}", board);
+    board.print_count();
 }
