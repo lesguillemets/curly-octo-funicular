@@ -4,8 +4,8 @@ fn main() {
     let board: Board = Board::initial();
     println!("{}", board);
     board.print_count();
-    println!("{:?}", board.place(Face::Black, (2,3)));
-    if let Ok(b) = board.place(Face::White, (2,3)) {
+    println!("{:?}", board.place(Face::Black, (2, 3)));
+    if let Ok(b) = board.place(Face::White, (2, 3)) {
         println!("{}", b);
     }
 }
@@ -73,7 +73,7 @@ impl Board {
 }
 
 impl Board {
-    fn assign(&mut self, player:Face, loc:(i8,i8)) -> Result<(),String> {
+    fn assign(&mut self, player: Face, loc: (i8, i8)) -> Result<(), String> {
         if let Some(_) = self.at(loc) {
             self.0[loc.0 as usize][loc.1 as usize] = Some(player);
             Ok(())
@@ -85,13 +85,13 @@ impl Board {
         match self.at(loc) {
             None => return Err("Out of bounds".to_owned()),
             Some(Some(_)) => return Err("Location Occupied".to_owned()),
-            _ => ()
+            _ => (),
         }
         let mut b = self.clone();
         let mut turn_any = false;
         for &dir in DIRS {
             let mut cur = loc.madd(dir);
-            let mut flips : Vec<(i8,i8)> = Vec::new();
+            let mut flips: Vec<(i8, i8)> = Vec::new();
             while let Some(Some(face)) = self.at(cur) {
                 if face == player {
                     if !(flips.is_empty()) {
@@ -110,7 +110,7 @@ impl Board {
             }
         }
         if turn_any {
-            b.assign(player,loc).expect("ierror");
+            b.assign(player, loc).expect("ierror");
             Ok(b)
         } else {
             Err("Invalid Move".to_owned())
@@ -142,17 +142,21 @@ impl Board {
 
 
 trait Monoid {
-    fn mempty () -> Self;
-    fn madd (&self, Self) -> Self;
+    fn mempty() -> Self;
+    fn madd(&self, Self) -> Self;
 }
 
-impl Monoid for (i8,i8) {
-    fn mempty () -> (i8,i8) { (0,0) }
-    fn madd(&self, v1:(i8,i8)) -> (i8,i8) { addv(*self,v1) }
+impl Monoid for (i8, i8) {
+    fn mempty() -> (i8, i8) {
+        (0, 0)
+    }
+    fn madd(&self, v1: (i8, i8)) -> (i8, i8) {
+        addv(*self, v1)
+    }
 }
 
-fn addv(v0:(i8,i8), v1:(i8,i8)) -> (i8,i8) {
-    (v0.0+v1.0, v0.1+v1.1)
+fn addv(v0: (i8, i8), v1: (i8, i8)) -> (i8, i8) {
+    (v0.0 + v1.0, v0.1 + v1.1)
 }
 
 impl fmt::Display for Board {
@@ -160,12 +164,12 @@ impl fmt::Display for Board {
         // TODO is this ok?
         let mut buf = String::new();
         buf.push_str(" ");
-        for i in 'a' as u8..'a' as u8+ SIZE as u8 {
+        for i in 'a' as u8..'a' as u8 + SIZE as u8 {
             buf.push_str(&format!("|{}", i as char));
         }
         buf.push_str("|\n");
-        for (i,xs) in self.0.iter().enumerate() {
-            buf.push_str(&format!("{}|",i));
+        for (i, xs) in self.0.iter().enumerate() {
+            buf.push_str(&format!("{}|", i));
             for p in xs {
                 // lifetime issue
                 // buf.push_str(match *p {
@@ -182,4 +186,3 @@ impl fmt::Display for Board {
         write!(f, "{}", buf)
     }
 }
-
