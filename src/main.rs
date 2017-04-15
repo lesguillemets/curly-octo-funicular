@@ -89,7 +89,7 @@ impl Board {
         }
         let mut b = self.clone();
         let mut turn_any = false;
-        for dir in DIRS {
+        for &dir in DIRS {
             let mut cur = loc.madd(dir);
             let mut flips : Vec<(i8,i8)> = Vec::new();
             while let Some(Some(face)) = self.at(cur) {
@@ -143,15 +143,15 @@ impl Board {
 
 trait Monoid {
     fn mempty () -> Self;
-    fn madd (&self, &Self) -> Self;
+    fn madd (&self, Self) -> Self;
 }
 
 impl Monoid for (i8,i8) {
     fn mempty () -> (i8,i8) { (0,0) }
-    fn madd(&self,v1:&(i8,i8)) -> (i8,i8) { addv(self,v1) }
+    fn madd(&self, v1:(i8,i8)) -> (i8,i8) { addv(*self,v1) }
 }
 
-fn addv(v0:&(i8,i8), v1:&(i8,i8)) -> (i8,i8) {
+fn addv(v0:(i8,i8), v1:(i8,i8)) -> (i8,i8) {
     (v0.0+v1.0, v0.1+v1.1)
 }
 
