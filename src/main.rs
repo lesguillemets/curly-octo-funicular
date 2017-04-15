@@ -96,6 +96,14 @@ impl fmt::Display for Board {
 }
 
 impl Board {
+    fn assign(&mut self, player:Face, loc:(i8,i8)) -> Result<(),String> {
+        if let Some(_) = self.at(loc) {
+            self.0[loc.0 as usize][loc.1 as usize] = Some(player);
+            Ok(())
+        } else {
+            Err("out of bounds?".to_owned())
+        }
+    }
     fn place(&self, player: Face, loc: (i8, i8)) -> Result<Board, String> {
         match self.at(loc) {
             None => return Err("Out of bounds".to_owned()),
@@ -114,7 +122,7 @@ impl Board {
                         for flip in flips.iter() {
                             // FIXME JUST NOW
                             println!("{:?}", flip);
-                            b.at(*flip).unwrap().unwrap().flip();
+                            b.assign(player, *flip).expect("ierror");
                         }
                     }
                     break;
@@ -125,7 +133,7 @@ impl Board {
             }
         }
         if turn_any {
-            b.0[loc.0 as usize][loc.1 as usize] = Some(player);
+            b.assign(player,loc).expect("ierror");
             Ok(b)
         } else {
             Err("Invalid Move".to_owned())
