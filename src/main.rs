@@ -72,34 +72,6 @@ impl Board {
     }
 }
 
-impl fmt::Display for Board {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // TODO is this ok?
-        let mut buf = String::new();
-        buf.push_str(" ");
-        for i in 'a' as u8..'a' as u8+ SIZE as u8 {
-            buf.push_str(&format!("|{}", i as char));
-        }
-        buf.push_str("|\n");
-        for (i,xs) in self.0.iter().enumerate() {
-            buf.push_str(&format!("{}|",i));
-            for p in xs {
-                // lifetime issue
-                // buf.push_str(match *p {
-                //     None => " |",
-                //     Some(ref x) => &format!("{}|", x)
-                // });
-                buf.push_str(&match *p {
-                    None => " |".to_string(),
-                    Some(x) => format!("{}|", x),
-                });
-            }
-            buf.push_str("\n");
-        }
-        write!(f, "{}", buf)
-    }
-}
-
 impl Board {
     fn assign(&mut self, player:Face, loc:(i8,i8)) -> Result<(),String> {
         if let Some(_) = self.at(loc) {
@@ -182,3 +154,32 @@ impl Monoid for (i8,i8) {
 fn addv(v0:&(i8,i8), v1:&(i8,i8)) -> (i8,i8) {
     (v0.0+v1.0, v0.1+v1.1)
 }
+
+impl fmt::Display for Board {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        // TODO is this ok?
+        let mut buf = String::new();
+        buf.push_str(" ");
+        for i in 'a' as u8..'a' as u8+ SIZE as u8 {
+            buf.push_str(&format!("|{}", i as char));
+        }
+        buf.push_str("|\n");
+        for (i,xs) in self.0.iter().enumerate() {
+            buf.push_str(&format!("{}|",i));
+            for p in xs {
+                // lifetime issue
+                // buf.push_str(match *p {
+                //     None => " |",
+                //     Some(ref x) => &format!("{}|", x)
+                // });
+                buf.push_str(&match *p {
+                    None => " |".to_string(),
+                    Some(x) => format!("{}|", x),
+                });
+            }
+            buf.push_str("\n");
+        }
+        write!(f, "{}", buf)
+    }
+}
+
