@@ -45,7 +45,7 @@ impl Face {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 struct Board(pub [[Option<Face>; SIZE]; SIZE]);
 /// For simplicity, we'll denote to locations as (x,y)
 /// and access to the cell by board[x][y].
@@ -76,8 +76,13 @@ impl fmt::Display for Board {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // TODO is this ok?
         let mut buf = String::new();
-        for xs in self.0.iter() {
-            buf.push_str("|");
+        buf.push_str(" ");
+        for i in 'a' as u8..'a' as u8+ SIZE as u8 {
+            buf.push_str(&format!("|{}", i as char));
+        }
+        buf.push_str("|\n");
+        for (i,xs) in self.0.iter().enumerate() {
+            buf.push_str(&format!("{}|",i));
             for p in xs {
                 // lifetime issue
                 // buf.push_str(match *p {
